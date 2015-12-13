@@ -8,7 +8,7 @@ nice_strings = Set.new
 
 def nice?(str)
   str.chars.select { |c| %w{ a e i o u }.include?(c) }.size > 2 &&
-    str.chars.each_cons(2).to_a.select { |cons| p cons; cons[0] == cons[1] }.any? &&
+    str.chars.each_cons(2).to_a.select { |cons| cons[0] == cons[1] }.any? &&
     !(str =~ /ab|cd|pq|xy/)
 end
 
