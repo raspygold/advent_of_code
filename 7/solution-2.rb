@@ -14,6 +14,14 @@ class Circuit
     @connections[identifier] = Connection.new(self, source, operator, modifier)
   end
 
+  def connect_everything
+    loop do
+      @connections.values.reject { |connection| connection.value }.each(&:calculate_value)
+
+      break if @connections.values.all? { |connection| connection.value }
+    end
+  end
+
   class Connection < Struct.new(:circuit, :source, :operator, :modifier)
     attr_accessor :value
 
@@ -82,12 +90,7 @@ input.each.with_index do |circuitry, i|
   circuit.create_connection(identifier, source, operator, modifier)
 end
 
-
-loop do
-  circuit.connections.values.reject { |connection| connection.value }.each(&:calculate_value)
-
-  break if circuit.connections.values.all? { |connection| connection.value }
-end
+circuit.connect_everything
 
 p circuit.connections["a"].value
 # => 3176
