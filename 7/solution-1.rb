@@ -3,19 +3,58 @@ file_path = File.expand_path("../input.txt", __FILE__)
 input     = File.readlines(file_path)
 
 class Circuit
-  attr_accessor :wires
+  attr_accessor :connections
 
   def initialize
-    @wires = {}
+    @connections = {}
   end
 
-  def assign_value(input, output)
-    @wires[output] = input
+  def create_connection(identifier, source, operator, modifier)
+    @connections[identifier] = Connection.new(self, source, operator, modifier)
   end
 
-  def value(wire)
-    @wires[wire]
+  class Connection < Struct.new(:circuit, :source, :operator, :modifier)
+    attr_accessor :value
+
+    def calculate_value
+      return if @value
+
+      source_value   = find_value(source)
+      modifier_value = find_value(modifier)
+
+      return unless modifier_value # required by every type of circuit connection
+
+      @value = case operator
+      when "AND"
+        return unless source_value
+        source_value & modifier_value
+      when "OR"
+        return unless source_value
+        source_value | modifier_value
+      when "LSHIFT"
+        return unless source_value
+        source_value << modifier_value
+      when "RSHIFT"
+        return unless source_value
+        source_value >> modifier_value
+      when "NOT"
+        ~modifier_value
+      else
+        modifier_value
+      end
+    end
+
+    def find_value(operand)
+      return nil if operand == "" # Empty string means not present
+      return operand.to_i if operand.to_i.to_s == operand # static value, not a wire connection — i.e. integer,
+
+      connection = circuit.connections[operand]
+
+      connection ? connection.value : nil
+    end
+
   end
+
 end
 
 
@@ -36,41 +75,18 @@ circuit = Circuit.new
 
 input.each.with_index do |circuitry, i|
   circuitry.strip! # Remove trailing \n
-  operand1, operator, operand2, output = parse_circuitry(circuitry)
 
-  case operator
-  when "AND"
-    next unless circuit.value(operand1) && circuit.value(operand2)
-    circuit.assign_value(circuit.value(operand1) & circuit.value(operand2), output)
-    # p "AND"
-  when "OR"
-    next unless circuit.value(operand1) && circuit.value(operand2)
-    circuit.assign_value(circuit.value(operand1) | circuit.value(operand2), output)
-    # p "OR"
-  when "LSHIFT"
-    next unless circuit.value(operand1)
-    circuit.assign_value(circuit.value(operand1) << operand2.to_i, output)
-    # p "LSHIFT"
-  when "RSHIFT"
-    next unless circuit.value(operand1)
-    circuit.assign_value(circuit.value(operand1) >> operand2.to_i, output)
-    # p "RSHIFT"
-  when "NOT"
-    next unless circuit.value(operand2)
-    assign_value(~operand2, output)
-    p "NOT"
-  else # No operator
-    is_int = operand2.to_i.to_s == operand2
-    value = is_int ? operand2.to_i : circuit.value(operand2)
+  source, operator, modifier, identifier = parse_circuitry(circuitry)
 
-    next unless value
-    circuit.assign_value(value, output)
-  end
-
-  puts circuit.wires
-
-  # p operator, "Made it through the block"
-
+  circuit.create_connection(identifier, source, operator, modifier)
 end
 
-# => 543903
+
+loop do
+  circuit.connections.values.reject { |connection| connection.value }.each(&:calculate_value)
+
+  break if circuit.connections.values.all? { |connection| connection.value }
+end
+
+p circuit.connections["a"].value
+# => 3176
