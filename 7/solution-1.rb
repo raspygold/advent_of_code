@@ -5,8 +5,33 @@ input     = File.readlines(file_path)
 class Circuit
   attr_accessor :connections
 
-  def initialize
+  def initialize(circuit_definition)
     @connections = {}
+
+    prepare_connections(circuit_definition)
+    connect_everything
+  end
+
+  private
+
+  def prepare_connections(circuit_definition)
+    circuit_definition.each do |connection_def|
+      connection_def.strip! # Remove trailing \n
+
+      source, operator, modifier, identifier = parse_connection(connection_def)
+
+      create_connection(identifier, source, operator, modifier)
+    end
+  end
+
+  def parse_connection(connection_def)
+    left_right_regex = /(\w\W?.*) -> (.*)/
+    inputs, output   = left_right_regex.match(connection_def)[1..2]
+
+    inputs_regex  = /\A((\w*)\W?(AND|OR|LSHIFT|RSHIFT|NOT)\W(\w+))|(\w+)\z/
+    parsed_inputs = inputs_regex.match(inputs)
+
+    [parsed_inputs[2], parsed_inputs[3], parsed_inputs[4] || parsed_inputs[5], output]
   end
 
   def create_connection(identifier, source, operator, modifier)
@@ -14,17 +39,19 @@ class Circuit
   end
 
   def connect_everything
-    loop do
-      @connections.values.reject { |connection| connection.value }.each(&:calculate_value)
+    @connections.size.times do |i|
+      @connections.values.reject { |connection| connection.value }.each(&:connect)
 
       break if @connections.values.all? { |connection| connection.value }
     end
+
+    raise "Circuit cannot be completed" unless @connections.values.all? { |connection| connection.value }
   end
 
   class Connection < Struct.new(:circuit, :source, :operator, :modifier)
     attr_accessor :value
 
-    def calculate_value
+    def connect
       return if @value
 
       source_value   = find_value(source)
@@ -66,30 +93,8 @@ class Circuit
 end
 
 
-def parse_circuitry(input)
-  left_right_regex = /(\w\W?.*) -> (.*)/
-  matching = left_right_regex.match(input)
 
-  left  = matching[1]
-  right = matching[2]
-
-  left_regex = /\A((\w*)\W?(AND|OR|LSHIFT|RSHIFT|NOT)\W(\w+))|(\w+)\z/
-  operation = left_regex.match(left)
-
-  [operation[2], operation[3], operation[4] || operation[5], right]
-end
-
-circuit = Circuit.new
-
-input.each.with_index do |circuitry, i|
-  circuitry.strip! # Remove trailing \n
-
-  source, operator, modifier, identifier = parse_circuitry(circuitry)
-
-  circuit.create_connection(identifier, source, operator, modifier)
-end
-
-circuit.connect_everything
+circuit = Circuit.new(input)
 
 p circuit.connections["a"].value
 # => 3176
