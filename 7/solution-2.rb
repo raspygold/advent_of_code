@@ -98,4 +98,4 @@ end
 circuit = Circuit.new(input)
 
 p circuit.connections["a"].value
-# => 3176
+# => 14710
