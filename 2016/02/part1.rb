@@ -2,7 +2,11 @@
 file_path = File.expand_path("../input", __FILE__)
 input     = File.readlines(file_path)
 
+keypad = [[1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]]
 current_button = [1, 1]
+
 code   = []
 
 movements = {
@@ -21,7 +25,7 @@ input.each.with_index do |line, index|
     current_button = next_button unless next_button.any? { |i| i > 2 || i < 0 }
   end
 
-  code << (current_button[0] * 3) + current_button[1] + 1
+  code << keypad[current_button[0]][current_button[1]]
 end
 
 
