@@ -25,7 +25,7 @@ input.split(", ").each do |movement|
 
     if visited_coords.uniq.size < blocks_moved # duplicate coords detected
       blocks = visited_coords.last.map(&:abs).reduce(&:+)
-      puts "The first location I visited twice is #{blocks} blocks away."
+      puts "The first location I visited twice is #{blocks} blocks away"
       exit
     end
   end

@@ -22,4 +22,4 @@ end
 coords = [directions[:N] - directions[:S], directions[:E] - directions[:W]]
 blocks = coords.map(&:abs).reduce(&:+)
 
-puts "Easter Bunny HQ is #{blocks} blocks away."
+puts "Easter Bunny HQ is #{blocks} blocks away"
