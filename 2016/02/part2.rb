@@ -23,7 +23,7 @@ movements = {
   "L" => [ 0, -1]
 }
 
-input.each.with_index do |line, index|
+input.each do |line|
   line.strip.split("").each do |movement|
     next_button = [
       current_button[0] + movements[movement][0],

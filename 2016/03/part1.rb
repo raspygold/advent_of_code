@@ -4,8 +4,8 @@ input     = File.readlines(file_path)
 
 valid_triangle_count = 0
 
-input.each.with_index do |line, index|
-  sides = line.strip.split(/\s+/).map(&:to_i).sort
+input.each do |triangle|
+  sides = triangle.strip.split(/\s+/).map(&:to_i).sort
   valid_triangle_count += 1 if sides[0..1].reduce(&:+) > sides[2]
 end
 
