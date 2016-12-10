@@ -3,7 +3,7 @@ file_path = File.expand_path("../input", __FILE__)
 input     = File.readlines(file_path)
 
 class Recipient
-  attr_writer :id, :chips
+  attr_reader :id, :chips
 
   def initialize(id)
     @id = id
