@@ -37,7 +37,10 @@ class Bot < Recipient
   def offload_chips
     @chips.sort!
 
-    raise "It's me, Bot #{@id}!" if @chips == [17, 61]
+    if @chips == [17, 61]
+      puts "It's me, Bot #{@id}!"
+      exit
+    end
 
     @low_recipient.receive(@chips.shift)
     @high_recipient.receive(@chips.shift)
@@ -46,7 +49,6 @@ end
 
 outputs = Hash.new { |h, k| h[k] = Output.new(k) }
 bots    = Hash.new { |h, k| h[k] = Bot.new(k) }
-bot_responsible = nil
 
 value_instructions   = input.select { |instruction| instruction.start_with?("value ") }
 offload_instructions = input.select { |instruction| instruction.start_with?("bot ") }
@@ -66,6 +68,3 @@ value_instructions.each do |instruction|
   value, bot_id = /value (\d+) goes to bot (\d+)/.match(instruction).captures.map(&:to_i)
   bots[bot_id].receive(value)
 end
-
-
-puts "", "The number of the bot that is responsible for comparing value-61 microchips with value-17 microchips is: #{bot_responsible}"
