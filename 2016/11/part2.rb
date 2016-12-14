@@ -49,7 +49,7 @@ end
 next_states = [
   elevator_floor: 0,
   floors: [
-    ["pr_gn", "pr_mc"],
+    ["pr_gn", "pr_mc", "el_gn", "el_mc", "di_gn", "di_mc"],
     ["co_gn", "cu_gn", "pl_gn", "ru_gn"],
     ["co_mc", "cu_mc", "pl_mc", "ru_mc"],
     []
