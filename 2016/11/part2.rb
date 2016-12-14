@@ -2,7 +2,7 @@
 require 'set'
 
 def valid_state?(state)
-  return false if $previous_states.include?(state)
+  return false if $previous_states.include?(state.hash)
 
   state[:floors].all? do |floor|
     floor.select { |item| item && item.end_with?("mc")}.all? do |mc|
@@ -37,7 +37,7 @@ def determine_next_states(state)
 
       if valid_state?(new_state)
         next_states << new_state
-        $previous_states << new_state
+        $previous_states << new_state.hash
       end
     end
   end
