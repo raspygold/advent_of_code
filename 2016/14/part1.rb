@@ -7,7 +7,7 @@ require "digest"
 def confirmed_key?(char:, from:)
   i = 1
   loop do
-    hash = Digest::MD5.hexdigest("#{$input}#{from + i}").downcase
+    hash = Digest::MD5.hexdigest("#{$input}#{from + i}")
     return true if hash =~ /(#{char})#{"\\1"*(4)}/
 
     i += 1
@@ -19,7 +19,7 @@ keys = []
 
 i = 0
 loop do
-  hash = Digest::MD5.hexdigest("#{$input}#{i}").downcase
+  hash = Digest::MD5.hexdigest("#{$input}#{i}")
   match = /(\w)\1\1/.match(hash)
 
   if match
