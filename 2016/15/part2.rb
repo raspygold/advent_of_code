@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-file_path = File.expand_path("../input1", __FILE__)
+file_path = File.expand_path("../input2", __FILE__)
 input     = File.readlines(file_path)
 
 class Sculpture
