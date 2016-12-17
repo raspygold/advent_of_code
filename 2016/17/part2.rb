@@ -26,6 +26,6 @@ def determine_next_moves(path, position)
   end.compact
 end
 
-shortest_path = determine_next_moves("", [0,0]).flatten.compact.min_by(&:length)
+shortest_path = determine_next_moves("", [0,0]).flatten.compact.max_by(&:length).length
 
-puts "", "The shortest path to the vault is: #{shortest_path}"
+puts "", "The longest path to the vault is: #{shortest_path}"
