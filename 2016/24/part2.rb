@@ -37,13 +37,6 @@ $adj_matrix = input.map.with_index do |row, y|
   end
 end
 
-# $adj_matrix.each do |row|
-#   row.each do |cell|
-#     print cell
-#   end
-#   puts
-# end
-
 possible_routes    = target_cells.keys.reject { |k| k == "0" }.permutation.to_a.map { |route| ["0"] + route + ["0"] }
 possible_movements = target_cells.keys.permutation(2).to_a.sort
 movement_costs     = possible_movements.each.with_object({}) do |(a, b), hsh|
