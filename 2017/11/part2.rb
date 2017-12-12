@@ -1,42 +1,40 @@
 #!/usr/bin/env ruby
 file_path = File.expand_path("../input", __FILE__)
-input     = File.read(file_path)
+input     = File.readlines(file_path)
 
-dirs = {
-  "n"  => [ 0,    1],
-  "s"  => [ 0,   -1],
-  "ne" => [ 1,  0.5],
-  "nw" => [-1,  0.5],
-  "se" => [ 1, -0.5],
-  "sw" => [-1, -0.5],
-}
+connections = Hash.new { |h, k| h[k] = [] }
+input.each do |connection|
+  connector, connectees = connection.split(" <-> ")
+  connector  = connector.to_i
+  connectees = connectees.split(", ").map(&:to_i)
 
-next_point     = [0,0]
-furthest_point = [0,0]
-
-input.strip.split(",").each do |step|
-  move = dirs[step]
-
-  next_point[0] += move[0]
-  next_point[1] += move[1]
-
-  furthest_point_distance = furthest_point[0].abs + furthest_point[1].abs * 2
-  next_point_distance     = next_point[0].abs     + next_point[1].abs     * 2
-
-  furthest_point = next_point.dup if next_point_distance > furthest_point_distance
+  connections[connector] += connectees
+  connectees.each { |connectee| connections[connectee] << connector }
 end
 
-steps_home = 0
+require 'set'
+groups = Set.new
+
+connections_to_check = connections.keys
 loop do
-  move = dirs.min_by do |k, v|
-    (furthest_point[0] + v[0]).abs + (furthest_point[1] + v[1]).abs
-  end[1]
+  connected_to = Set.new([connections_to_check.first])
+  loop do
+    previous_size = connected_to.size
 
-  furthest_point[0] += move[0]
-  furthest_point[1] += move[1]
-  steps_home += 1
+    new_connections = Set.new
+    connected_to.each do |connection|
+      new_connection = connections[connection]
+      new_connections += new_connection
+      connections_to_check = connections_to_check - new_connection
+    end
 
-  break if furthest_point.all?(&:zero?)
+    connected_to += new_connections
+
+    break if previous_size == connected_to.size # No new connections to walk
+  end
+  groups << connected_to
+
+  break if connections_to_check.empty?
 end
 
-p steps_home
+p groups.size

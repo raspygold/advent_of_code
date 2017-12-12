@@ -1,27 +1,40 @@
---- Day 11: Hex Ed ---
-Crossing the bridge, you've barely reached the other side of the stream when a program comes up to you, clearly in distress. "It's my child process," she says, "he's gotten lost in an infinite grid!"
+--- Day 12: Digital Plumber ---
+Walking along the memory banks of the stream, you find a small village that is experiencing a little confusion: some programs can't communicate with each other.
 
-Fortunately for her, you have plenty of experience with infinite grids.
+Programs in this village communicate using a fixed system of pipes. Messages are passed between programs using these pipes, but most programs aren't connected to each other directly. Instead, programs pass messages between each other until the message reaches the intended recipient.
 
-Unfortunately for you, it's a hex grid.
+For some reason, though, some of these messages aren't ever reaching their intended recipient, and the programs suspect that some pipes are missing. They would like you to investigate.
 
-The hexagons ("hexes") in this grid are aligned such that adjacent hexes can be found to the north, northeast, southeast, south, southwest, and northwest:
+You walk through the village and record the ID of each program and the IDs with which it can communicate directly (your puzzle input). Each program has one or more programs with which it can communicate, and these pipes are bidirectional; if 8 says it can communicate with 11, then 11 will say it can communicate with 8.
 
-  \ n  /
-nw +--+ ne
-  /    \
--+      +-
-  \    /
-sw +--+ se
-  / s  \
-You have the path the child process took. Starting where he started, you need to determine the fewest number of steps required to reach him. (A "step" means to move from the hex you are in to any adjacent hex.)
+You need to figure out how many programs are in the group that contains program ID 0.
 
-For example:
+For example, suppose you go door-to-door like a travelling salesman and record the following list:
 
-ne,ne,ne is 3 steps away.
-ne,ne,sw,sw is 0 steps away (back where you started).
-ne,ne,s,s is 2 steps away (se,se).
-se,sw,se,sw,sw is 3 steps away (s,s,sw).
+0 <-> 2
+1 <-> 1
+2 <-> 0, 3, 4
+3 <-> 2, 4
+4 <-> 2, 3, 6
+5 <-> 6
+6 <-> 4, 5
+In this example, the following programs are in the group that contains program ID 0:
+
+Program 0 by definition.
+Program 2, directly connected to program 0.
+Program 3 via program 2.
+Program 4 via program 2.
+Program 5 via programs 6, then 4, then 2.
+Program 6 via programs 4, then 2.
+Therefore, a total of 6 programs are in this group; all but program 1, which has a pipe that connects it to itself.
+
+How many programs are in the group that contains program ID 0?
 
 --- Part Two ---
-How many steps away is the furthest he ever got from his starting position?
+There are more programs than just the ones in the group containing program ID 0. The rest of them have no way of reaching that group, and still might have no way of reaching each other.
+
+A group is a collection of programs that can all communicate via pipes either directly or indirectly. The programs you identified just a moment ago are all part of the same group. Now, they would like you to determine the total number of groups.
+
+In the example above, there were 2 groups: one consisting of programs 0,2,3,4,5,6, and the other consisting solely of program 1.
+
+How many groups are there in total?
