@@ -1,30 +1,35 @@
 #!/usr/bin/env ruby
 file_path = File.expand_path("../input", __FILE__)
-input     = File.readlines(file_path)
+input     = File.read(file_path)
 
-connections = Hash.new { |h, k| h[k] = [] }
-input.each do |connection|
-  connector, connectees = connection.split(" <-> ")
-  connector  = connector.to_i
-  connectees = connectees.split(", ").map(&:to_i)
+dirs = {
+  "n"  => [ 0,    1],
+  "s"  => [ 0,   -1],
+  "ne" => [ 1,  0.5],
+  "nw" => [-1,  0.5],
+  "se" => [ 1, -0.5],
+  "sw" => [-1, -0.5],
+}
 
-  connections[connector] += connectees
-  connectees.each { |connectee| connections[connectee] << connector }
+end_point = [0,0]
+input.strip.split(",").each do |step|
+  move = dirs[step]
+
+  end_point[0] += move[0]
+  end_point[1] += move[1]
 end
 
-require 'set'
-connected_to = Set.new([0])
+steps_home = 0
 loop do
-  previous_size = connected_to.size
+  move = dirs.min_by do |k, v|
+    (end_point[0] + v[0]).abs + (end_point[1] + v[1]).abs
+  end[1]
 
-  new_connections = Set.new
-  connected_to.each do |connection|
-    new_connections += connections[connection]
-  end
+  end_point[0] += move[0]
+  end_point[1] += move[1]
+  steps_home += 1
 
-  connected_to += new_connections
-
-  break if previous_size == connected_to.size # No new connections to walk
+  break if end_point.all?(&:zero?)
 end
 
-p connected_to.size
+p steps_home
