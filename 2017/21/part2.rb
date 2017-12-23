@@ -56,7 +56,8 @@ grid = [[".","#","."],
         [".",".","#"],
         ["#","#","#"]]
 
-5.times do
+18.times do |idx|
+  puts "#{idx}: #{grid.size * grid.size}"
   sub_grid_size = grid.size % 2 == 0 ? 2 : 3
 
   groupings = (0...grid.size).each_slice(sub_grid_size).to_a
@@ -88,9 +89,6 @@ grid = [[".","#","."],
 
   grid = vstacked_matrices.to_a
 end
-
-puts
-print_grid grid
 
 active_pixels = grid.inject(0) do |sum, row|
   sum + row.count { |v| v == '#' }
