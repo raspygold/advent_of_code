@@ -54,4 +54,5 @@ carrier_coord = [map.size / 2, map.first.size / 2] # [row, col]
   print "." if i % 10_000 == 0
 end
 
+puts
 puts nodes_infected.size
