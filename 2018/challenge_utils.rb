@@ -9,7 +9,7 @@ module ChallengeUtils
 
   # test the solution attempt against the test data sets
   def test(input, expected_result)
-    orig_input = input.dup.freeze
+    orig_input = input.to_s.dup.freeze
     result = solve(input)
 
     input_sample = orig_input.size > 10 ? "#{orig_input.slice(0, 10)} ..." : orig_input
