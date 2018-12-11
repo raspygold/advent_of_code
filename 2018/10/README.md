@@ -139,8 +139,6 @@ After 3 seconds, the message appeared briefly: HI. Of course, your message will 
 
 What message will eventually appear in the sky?
 
-Your puzzle answer was ZAEKAJGC.
-
 The first half of this puzzle is complete! It provides one gold star: *
 
 --- Part Two ---
