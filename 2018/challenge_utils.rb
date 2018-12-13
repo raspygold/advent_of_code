@@ -1,8 +1,9 @@
 module ChallengeUtils
-  def read_input(filename)
+  def read_input(filename, strip=true)
     caller_path = caller[0].partition(":")[0]
     input_path  = File.expand_path(filename)
-    input       = File.readlines(input_path).map(&:strip)
+    input       = File.readlines(input_path)
+    input       = input.map(&:strip) if strip
     input       = input.first if input.size == 1 # unwrap the array if it's just one line
     input
   end
