@@ -34,4 +34,4 @@ test([100756], 50346)
 puts "-"*50, ""
 
 # solve for reals
-puts "Solution:", solve(read_input(ints: true ))
+puts "Solution:", solve(read_input(ints: true))

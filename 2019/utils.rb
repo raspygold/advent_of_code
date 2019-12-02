@@ -1,9 +1,11 @@
 module Utils
-  def read_input(file: "input", strip: true, ints: false)
+  def read_input(file: "input", strip: true, ints: false, split_by: nil)
     input = File.readlines(File.expand_path(file))
+    input = input.first if input.size == 1 && split_by # unwrap the array if it's just one line that we're going to split
+    input = input.split(split_by) if split_by
     input = input.map(&:strip) if strip
     input = input.map(&:to_i) if ints
-    input = input.first if input.size == 1 # unwrap the array if it's just one line
+    input = input.first if input.size == 1 # unwrap the array if it's still just one value
     input
   end
 
