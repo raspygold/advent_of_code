@@ -1,24 +1,19 @@
-#!/usr/bin/env ruby
-require_relative "../utils"
-include Utils
-
-## SOLUTION BEGINS
-def solve(input)
-  fuel = input.map do |mass|
-    (mass / 3.0).floor - 2
+require_relative "../puzzle"
+class Day1Part1 < Puzzle
+  def test_cases
+    { # {input => expected}
+      [12]     => 2,
+      [14]     => 2,
+      [1969]   => 654,
+      [100756] => 33583,
+    }
   end
 
-  fuel.sum
+  def solve(input, testing: false)
+    fuel = input.map(&:to_i).map do |mass|
+      (mass / 3.0).floor - 2
+    end
+
+    fuel.sum
+  end
 end
-## SOLUTION ENDS
-
-# test scenarios
-test([12], 2)
-test([14], 2)
-test([1969], 654)
-test([100756], 33583)
-
-puts "-"*50, ""
-
-# solve for reals
-puts "Solution:", solve(read_input(ints: true))
