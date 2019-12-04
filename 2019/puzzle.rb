@@ -7,7 +7,7 @@ class Puzzle
     puts "Solution:", solve(read_input)
   end
 
-  def read_input(file: "input", strip: true) # Only works when called from dir with solutions
+  def read_input(file: "input", strip: true)
     input = File.readlines(File.expand_path(file, File.dirname($0)))
     input = input.map(&:strip) if strip
     input = input.first if input.size == 1 # unwrap the array if it's still just one value
