@@ -21,7 +21,7 @@ class Puzzle
 
     input_sample = orig_desc.size > 10 ? "#{orig_desc.slice(0, 10)} ..." : orig_desc
     if result == expected
-      puts "\n  Test passed with input: #{input_sample}"
+      puts "\nTest passed with input: #{input_sample}"
     else
       puts %Q(\nTest failed with input: #{input_sample}\n
   Expected: #{expected.inspect}\n\
