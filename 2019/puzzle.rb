@@ -1,16 +1,14 @@
 class Puzzle
   def initialize
-    # TEST CASES
     test_cases.each do |input, expected|
       test(input, expected)
     end
     puts "-"*50, ""
-    # SOLVE
     puts "Solution:", solve(read_input)
   end
 
   def read_input(file: "input", strip: true) # Only works when called from dir with solutions
-    input = File.readlines(File.expand_path(file))
+    input = File.readlines(File.expand_path(file, File.dirname($0)))
     input = input.map(&:strip) if strip
     input = input.first if input.size == 1 # unwrap the array if it's still just one value
     input
