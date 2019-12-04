@@ -8,7 +8,6 @@ class Day3Part1 < Puzzle
     }
   end
 
-  # Use `testing` when the test cases behaviour differs
   def solve(input, testing: false)
     count = 0
     min, max = input.split('-').map(&:to_i)
