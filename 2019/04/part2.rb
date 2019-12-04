@@ -1,5 +1,5 @@
 require_relative "../puzzle"
-class Day3Part1 < Puzzle
+class Day4Part2 < Puzzle
   def test_cases
     { # {input => expected}
       "112233-112233" => 1,
@@ -12,10 +12,10 @@ class Day3Part1 < Puzzle
     count = 0
     min, max = input.split('-').map(&:to_i)
     (min..max).each do |n|
-      next if n < 100_000 || n > 999_999
+      next unless n.between?(100_000, 999_999)
       da = n.digits.reverse
       next if da != da.sort
-      next unless da.group_by { |x|x }.any? {|k,v| v.size == 2 }
+      next unless da.group_by { |x| x }.any? { |k, v| v.size == 2 }
 
       count += 1
     end
