@@ -14,6 +14,11 @@ class Puzzle
     input
   end
 
+  # defined in case I don't use any test cases on a day's solution
+  def test_cases
+    {}
+  end
+
   # test the solution attempt against the test data sets
   def test(input, expected)
     orig_desc = input.to_s.dup.freeze
