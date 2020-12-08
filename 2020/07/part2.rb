@@ -3,10 +3,15 @@ class Day07P2 < Puzzle
   def test_cases
     { # {input => expected}
       [
-        'faded blue bags contain 0 other bags.',
-        'dotted black bags contain 0 other bags.',
-        'vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.',
-        'dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.'
+        'light red bags contain 1 bright white bag, 2 muted yellow bags.',
+        'dark orange bags contain 3 bright white bags, 4 muted yellow bags.',
+        'bright white bags contain 1 shiny gold bag.',
+        'muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.',
+        'shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.',
+        'dark olive bags contain 3 faded blue bags, 4 dotted black bags.',
+        'vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.',
+        'faded blue bags contain no other bags.',
+        'dotted black bags contain no other bags.'
       ] => 32,
       [
         'shiny gold bags contain 2 dark red bags.',
@@ -23,29 +28,7 @@ class Day07P2 < Puzzle
   def solve(input, testing: false)
     @bag_relationships = build_bag_relationships(input)
 
-    # find_all_possible_bags_containing_recursively('shiny gold bag')
-
-    next_searching_for = ['shiny gold bag']
-    possible_nestings  = 0
-    outer_bags_seen = []
-    loop do
-      searching_for = next_searching_for.dup
-      next_searching_for.clear
-
-      next_searching_for = searching_for.map.with_object([]) do |bag, arr|
-        bag_name, can_contain = find_bags_that_can_hold(bag)
-        arr << find_bags_that_can_hold(bag)
-      end.flatten.uniq
-
-      # Only count new outer bags
-      next_searching_for -= outer_bags_seen
-      outer_bags_seen += next_searching_for
-
-      possible_nestings += next_searching_for.size
-      break if next_searching_for.empty?
-    end
-
-    possible_nestings
+    number_of_bags_contained_in('shiny gold bag') - 1 # don't count the outer bag
   end
 
   def build_bag_relationships(rule_list)
@@ -58,20 +41,11 @@ class Day07P2 < Puzzle
     end
   end
 
-  def find_all_possible_bags_containing_recursively(bag)
-    containing_bags = @bag_relationships.select do |bag_name, can_contain|
-      bag_name if can_contain.keys.include?(bag)
-    end.keys
-
-    puts bag, containing_bags.inspect
-
-    if containing_bags.empty?
-      1
-    else
-      1 + containing_bags.map do |containing_bag|
-        find_all_possible_bags_containing_recursively(containing_bag)
-      end.reduce(&:+)
-    end
+  def number_of_bags_contained_in(bag)
+    bags_inside = (@bag_relationships[bag].map do |bag_description, quantity|
+      number_of_bags_contained_in(bag_description) * quantity
+    end.reduce(&:+)) || 0
+    1 + bags_inside
   end
 
   def find_bags_that_can_hold(bag)

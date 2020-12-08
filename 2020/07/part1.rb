@@ -19,8 +19,6 @@ class Day07P1 < Puzzle
   def solve(input, testing: false)
     @bag_relationships = build_bag_relationships(input)
 
-    # find_all_possible_bags_containing_recursively('shiny gold bag')
-
     next_searching_for = ['shiny gold bag']
     possible_nestings  = 0
     outer_bags_seen = []
@@ -50,22 +48,6 @@ class Day07P1 < Puzzle
         hsh[description] = quantity.to_i
       end
       relationships[bag_name] = can_contain
-    end
-  end
-
-  def find_all_possible_bags_containing_recursively(bag)
-    containing_bags = @bag_relationships.select do |bag_name, can_contain|
-      bag_name if can_contain.keys.include?(bag)
-    end.keys
-
-    puts bag, containing_bags.inspect
-
-    if containing_bags.empty?
-      1
-    else
-      1 + containing_bags.map do |containing_bag|
-        find_all_possible_bags_containing_recursively(containing_bag)
-      end.reduce(&:+)
     end
   end
 
