@@ -1,18 +1,22 @@
 require_relative "../puzzle"
-class Day07P1 < Puzzle
+class Day07P2 < Puzzle
   def test_cases
     { # {input => expected}
       [
-        'light red bags contain 1 bright white bag, 2 muted yellow bags.',
-        'dark orange bags contain 3 bright white bags, 4 muted yellow bags.',
-        'bright white bags contain 1 shiny gold bag.',
-        'muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.',
-        'shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.',
-        'dark olive bags contain 3 faded blue bags, 4 dotted black bags.',
-        'vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.',
-        'faded blue bags contain no other bags.',
-        'dotted black bags contain no other bags.'
-      ] => 4
+        'faded blue bags contain 0 other bags.',
+        'dotted black bags contain 0 other bags.',
+        'vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.',
+        'dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.'
+      ] => 32,
+      [
+        'shiny gold bags contain 2 dark red bags.',
+        'dark red bags contain 2 dark orange bags.',
+        'dark orange bags contain 2 dark yellow bags.',
+        'dark yellow bags contain 2 dark green bags.',
+        'dark green bags contain 2 dark blue bags.',
+        'dark blue bags contain 2 dark violet bags.',
+        'dark violet bags contain no other bags.'
+      ] => 126
     }
   end
 
@@ -29,6 +33,7 @@ class Day07P1 < Puzzle
       next_searching_for.clear
 
       next_searching_for = searching_for.map.with_object([]) do |bag, arr|
+        bag_name, can_contain = find_bags_that_can_hold(bag)
         arr << find_bags_that_can_hold(bag)
       end.flatten.uniq
 
@@ -72,6 +77,6 @@ class Day07P1 < Puzzle
   def find_bags_that_can_hold(bag)
     @bag_relationships.select do |bag_name, can_contain|
       bag_name if can_contain.keys.include?(bag)
-    end.keys
+    end
   end
 end
