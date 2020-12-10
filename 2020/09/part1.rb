@@ -1,6 +1,6 @@
 require_relative "../puzzle"
 
-class Day09P2 < Puzzle
+class Day09P1 < Puzzle
   def test_cases
     { # {input => expected}
       ['35','20','15','25','47','40',
