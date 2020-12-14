@@ -1,6 +1,6 @@
 require_relative "../puzzle"
 
-class Day12P1 < Puzzle
+class Day13P1 < Puzzle
 
   class Bus
     attr_accessor :id
